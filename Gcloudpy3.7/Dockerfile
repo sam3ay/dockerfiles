@@ -21,8 +21,8 @@ RUN apt-get update && \
       pkg-config \
       unzip
 
-RUN pip3 install --upgrade pip && \
-    pip3 install datalab flake8 neovim  
+RUN pip install --upgrade pip && \
+    pip install datalab flake8 neovim  
 
 # setting up personalized environment
 RUN cd ~ && git clone https://github.com/sam3ay/dotfiles.git && \
