@@ -33,6 +33,7 @@ RUN apt-get update && \
 	pkg-config \
 	python-neovim \
 	python3-neovim \
+	sudo \
 	tk-dev \
 	unzip \
 	uuid-dev \

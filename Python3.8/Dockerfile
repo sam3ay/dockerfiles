@@ -14,6 +14,7 @@ RUN apt-get update && \
     pkg-config \
     python-neovim \
     python3-neovim \
+    sudo \
     unzip \
     wget \
     && rm -rf /var/lib/apt/lists/*
