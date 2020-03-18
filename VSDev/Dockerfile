@@ -30,4 +30,3 @@ WORKDIR /home/docker
 # custom bashrc
 RUN git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git && \
 	echo ". /home/docker/dotfiles/.custom_bashrc" >>~/.bashrc
-
