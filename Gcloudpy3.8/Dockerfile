@@ -17,6 +17,7 @@ RUN apt-get update && \
 	ca-certificates \
 	cmake \
 	gettext \
+	git \
 	libbluetooth-dev \
 	libssl-dev \
 	libtool \
@@ -38,6 +39,8 @@ RUN apt-get update && \
 	unzip \
 	uuid-dev \
 	wget \
+	&& apt-get autoremove -y \
+	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568

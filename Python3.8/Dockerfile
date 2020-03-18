@@ -7,6 +7,7 @@ RUN apt-get update && \
     build-essential \
     cmake \
     gettext \
+    git \
     libtool \
     libtool-bin \
     neovim \
@@ -17,6 +18,8 @@ RUN apt-get update && \
     sudo \
     unzip \
     wget \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
