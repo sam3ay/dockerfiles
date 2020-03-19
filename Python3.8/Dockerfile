@@ -1,7 +1,10 @@
 FROM python:3.8-buster
 
-RUN apt-get update && \
-    apt-get install -y \
+ARG USERNAME=docker
+ARG USER_UID=1001
+ARG USER_GID=$USER_UID
+
+RUN apt-get update && apt-get install -y \
     autoconf \
     automake \
     build-essential \
@@ -25,16 +28,19 @@ RUN apt-get update && \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
-USER docker
+USER $USERNAME
 
-ENV XDG_CONFIG_HOME=/home/docker/dotfiles/.config
+ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
 
-WORKDIR /home/docker
+WORKDIR /home/${USERNAME}
 
 # custom bashrc
 RUN git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git && \
-    echo ". /home/docker/dotfiles/.custom_bashrc" >>~/.bashrc
+    echo ". /home/${USERNAME}/dotfiles/.custom_bashrc" >>~/.bashrc
 
 ENTRYPOINT ["/bin/bash"]

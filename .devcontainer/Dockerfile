@@ -1,6 +1,6 @@
 # To fully customize the contents of this image, use the following Dockerfile instead:
 # https://github.com/microsoft/vscode-dev-containers/tree/v0.108.0/containers/debian-10-git/.devcontainer/Dockerfile
-FROM sam3ay/vsdev:latest
+FROM sam3ay/vsdev:pass
 
 # ** [Optional] Uncomment this section to install additional packages. **
 #
@@ -13,4 +13,10 @@ FROM sam3ay/vsdev:latest
 #    && apt-get clean -y \
 #    && rm -rf /var/lib/apt/lists/*
 # ENV DEBIAN_FRONTEND=dialog
+ARG USERNAME=docker
 
+RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
+	/home/$USERNAME/.vscode-server-insiders/extensions \
+	&& chown -R $USERNAME \
+	/home/$USERNAME/.vscode-server \
+	/home/$USERNAME/.vscode-server-insiders

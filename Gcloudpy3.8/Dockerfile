@@ -1,5 +1,8 @@
 FROM google/cloud-sdk:latest
 
+ARG USERNAME=docker
+ARG USER_UID=1001
+ARG USER_GID=$USER_UID
 ## Taken from 3.8.2-buster
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -9,8 +12,7 @@ ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 
 # extra dependencies (over what buildpack-deps already includes)
-RUN apt-get update && \
-	apt-get install -y \
+RUN apt-get update && apt-get install -y \
 	autoconf \
 	automake \
 	build-essential \
@@ -117,14 +119,18 @@ RUN set -ex; \
 	\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
-USER docker
+RUN groupadd --gid $USER_GID $USERNAME \
+	&& useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+	&& echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+	&& chmod 0440 /etc/sudoers.d/$USERNAME
 
-ENV XDG_CONFIG_HOME=/home/docker/dotfiles/.config
+USER $USERNAME
 
-WORKDIR /home/docker
+ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
+
+WORKDIR /home/${USERNAME}
 
 # custom bashrc
 RUN git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git && \
-	echo ". /home/docker/dotfiles/.custom_bashrc" >>~/.bashrc
+	echo ". /home/${USERNAME}/dotfiles/.custom_bashrc" >>~/.bashrc
