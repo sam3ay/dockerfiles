@@ -1,6 +1,6 @@
 # To fully customize the contents of this image, use the following Dockerfile instead:
 # https://github.com/microsoft/vscode-dev-containers/tree/v0.108.0/containers/debian-10-git/.devcontainer/Dockerfile
-FROM sam3ay/vsdev:pass
+FROM sam3ay/vsdev:latest
 
 # ** [Optional] Uncomment this section to install additional packages. **
 #
