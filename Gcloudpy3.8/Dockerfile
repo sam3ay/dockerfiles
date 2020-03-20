@@ -1,4 +1,5 @@
 FROM google/cloud-sdk:latest
+LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
 ARG USERNAME=docker
 ARG USER_UID=1001

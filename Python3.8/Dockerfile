@@ -1,4 +1,5 @@
 FROM python:3.8-buster
+LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
 ARG USERNAME=docker
 ARG USER_UID=1001
