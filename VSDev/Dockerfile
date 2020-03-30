@@ -3,13 +3,14 @@
 FROM mcr.microsoft.com/vscode/devcontainers/base:debian-9
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
-ARG USERNAME=docker
-ARG USER_UID=1001
+ARG USERNAME=vscode
+ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 # Docker Compose version
 ARG COMPOSE_VERSION=1.24.0
 
 # Configure apt and install packages
+# https://github.com/microsoft/vscode-dev-containers/blob/master/containers/docker-in-docker/.devcontainer/Dockerfile
 RUN apt-get update \
 	&& apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
 	#
@@ -28,8 +29,8 @@ RUN apt-get update \
 	&& chmod +x /usr/local/bin/docker-compose \
 	#
 	# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
-	&& groupadd --gid $USER_GID $USERNAME \
-	&& useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+	# && groupadd --gid $USER_GID $USERNAME \
+	# && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
 	# [Optional] Add sudo support for the non-root user
 	&& apt-get install -y sudo \
 	&& echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\

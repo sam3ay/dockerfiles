@@ -1,6 +1,6 @@
 # To fully customize the contents of this image, use the following Dockerfile instead:
 # https://github.com/microsoft/vscode-dev-containers/tree/v0.108.0/containers/debian-10-git/.devcontainer/Dockerfile
-FROM sam3ay/vsdev:latest
+FROM sam3ay/vsdev:pass
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
 # ** [Optional] Uncomment this section to install additional packages. **
@@ -14,7 +14,7 @@ LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 #    && apt-get clean -y \
 #    && rm -rf /var/lib/apt/lists/*
 # ENV DEBIAN_FRONTEND=dialog
-ARG USERNAME=docker
+ARG USERNAME=vscode
 
 RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
 	/home/$USERNAME/.vscode-server-insiders/extensions \
