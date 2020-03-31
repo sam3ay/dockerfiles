@@ -134,4 +134,4 @@ WORKDIR /home/${USERNAME}
 
 # custom bashrc
 RUN git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git && \
-	echo ". /home/${USERNAME}/dotfiles/.custom_bashrc" >>~/.bashrc
+	echo ". ${XDG_CONFIG_HOME}/.custom_bashrc" >>~/.bashrc
