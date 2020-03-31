@@ -22,7 +22,7 @@ fi
 apt-get -y upgrade
 
 # Install common dependencies
-apt-get update && apt-get install -y --no-install-recommends \
+apt-get install -y --no-install-recommends \
     autoconf \
     apt-transport-https \
     automake \
@@ -101,8 +101,8 @@ else
 fi
 
 # dotfiles
-git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git
-cp -R /root/dotfiles/.config ${XDG_CONFIG_HOME}
+git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git /home/${USERNAME}/dotfiles
+# cp -R /tmp/dotfiles/.config ${XDG_CONFIG_HOME}
 echo ". ${XDG_CONFIG_HOME}/.custom_bashrc" >>~/.bashrc
 
 # Add add sudo support for non-root user
@@ -112,6 +112,6 @@ chmod 0440 /etc/sudoers.d/$USERNAME
 
 if [ "$INSTALL_ZSH" = "true" ]; then
     apt-get install -y zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
     chown -R $USER_UID:$USER_GID ${XDG_CONFIG_HOME}
 fi
