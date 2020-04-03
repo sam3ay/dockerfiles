@@ -1,6 +1,6 @@
 # To fully customize the contents of this image, use the following Dockerfile instead:
 # https://github.com/microsoft/vscode-dev-containers/tree/v0.108.0/containers/debian-10-git/.devcontainer/Dockerfile
-FROM mcr.microsoft.com/vscode/devcontainers/base:debian-9
+FROM mcr.microsoft.com/vscode/devcontainers/base:debian-10
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
 ARG USERNAME=vscode
@@ -17,11 +17,9 @@ ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/sc
 # Docker Compose version
 ARG COMPOSE_VERSION=1.24.0
 
-ENV DEBIAN_FRONTEND=noninteractive
-# Configure apt and install packages
 # https://github.com/microsoft/vscode-dev-containers/blob/master/containers/docker-in-docker/.devcontainer/Dockerfile
 RUN apt-get update \
-	&& apt-get -y install --no-install-recommends apt-utils dialog 2>&1 \
+	&& apt-get -y install --no-install-recommends apt-utils dialog, python3 2>&1 \
 	#
 	# Verify git, process tools installed
 	&& apt-get -y install git openssh-client less iproute2 procps \
@@ -43,8 +41,6 @@ RUN apt-get update \
 	&& apt-get autoremove -y \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
-
-ENV DEBIAN_FRONTEND=dialog
 
 USER $USERNAME
 

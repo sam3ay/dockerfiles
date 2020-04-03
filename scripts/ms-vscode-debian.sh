@@ -26,34 +26,78 @@ apt-get install -y --no-install-recommends \
     autoconf \
     apt-transport-https \
     automake \
+    autoconf \
+    bzip2 \
+    libffi-dev \
+    libgdbm-dev \
+    libglib2.0-dev \
+    libgmp-dev \
+    libjpeg-dev \
+    libkrb5-dev \
+    liblzma-dev \
+    libmagickcore-dev \
+    libmagickwand-dev \
+    libncurses5-dev \
+    libpq-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libtool \
+    libwebp-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libyaml-dev \
     build-essential \
     ca-certificates \
     cmake \
     curl \
+    dpkg-dev \
+    file \
     fzf \
+    g++ \
+    gcc \
     gettext \
     git \
+    imagemagick \
     iproute2 \
     less \
+    libbz2-dev \
     libc6 \
+    libc6-dev \
+    libcurl4-openssl-dev \
+    libdb-dev \
+    libdb4o-cil-dev \
+    libevent-dev \
     libgcc1 \
+    libgdm-dev \
     libgssapi-krb5-2 \
     libicu[0-9][0-9] \
     liblttng-ust0 \
+    libmaxminddb-dev \
+    libncursesw5-dev \
+    libpcap-dev \
+    libpng-dev \
+    libssl-dev \
     libstdc++6 \
+    libsqlite3-dev \
+    libreadline-dev \
+    libtk8.5 \
     libtool \
     libtool-bin \
     lsb-release \
+    make \
     neovim \
     ninja-build \
     openssh-client \
     pkg-config \
+    patch \
     procps \
     python-neovim \
     python3-neovim \
     sudo \
     unzip \
     wget \
+    xz-utils \
     zlib1g
 
 # Install libssl1.1 if available
