@@ -8,18 +8,17 @@ ARG USERNAME=node
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
+# zsh env variables
 ENV ZDOTDIR=${XDG_CONFIG_HOME}/zsh
 ENV ZSH=${ZDOTDIR}/.oh-my-zsh
-# Set to false to skip installing zsh and Oh My ZSH!
+
+# Set to false to skip installing zsh
 ARG INSTALL_ZSH="true"
 
 ENV NPM_CONFIG_PREFIX=${HOME}/.npm-global
 ENV PATH=$PATH:${NPM_CONFIG_PREFIX}/bin
 
 ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/ms-vscode-debian.sh
-
-# Avoid warnings by switching to noninteractive
-ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get -y install --no-install-recommends apt-utils dialog wget ca-certificates 2>&1 \
 	# Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
@@ -30,10 +29,6 @@ RUN apt-get update && apt-get -y install --no-install-recommends apt-utils dialo
 	&& apt-get autoremove -y \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
-
-
-
-ENV DEBIAN_FRONTEND=dialog
 
 USER ${USERNAME}
 
