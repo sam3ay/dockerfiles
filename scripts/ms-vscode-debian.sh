@@ -22,31 +22,12 @@ fi
 apt-get -y upgrade
 
 # Install common dependencies
-apt-get install -y --no-install-recommends \
+apt-get install -y \
     autoconf \
     apt-transport-https \
     automake \
     autoconf \
     bzip2 \
-    libffi-dev \
-    libgdbm-dev \
-    libglib2.0-dev \
-    libgmp-dev \
-    libjpeg-dev \
-    libkrb5-dev \
-    liblzma-dev \
-    libmagickcore-dev \
-    libmagickwand-dev \
-    libncurses5-dev \
-    libpq-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    libtool \
-    libwebp-dev \
-    libxml2-dev \
-    libxslt-dev \
-    libyaml-dev \
     build-essential \
     ca-certificates \
     cmake \
@@ -62,29 +43,42 @@ apt-get install -y --no-install-recommends \
     iproute2 \
     less \
     libbz2-dev \
-    libc6 \
     libc6-dev \
     libcurl4-openssl-dev \
     libdb-dev \
     libdb4o-cil-dev \
     libevent-dev \
+    libffi-dev \
     libgcc1 \
-    libgdm-dev \
+    libgdbm-dev \
+    libglib2.0-dev \
+    libgmp-dev \
     libgssapi-krb5-2 \
     libicu[0-9][0-9] \
+    libjpeg-dev \
+    libkrb5-dev \
+    liblzma-dev \
+    libmagickcore-dev \
+    libmagickwand-dev \
+    libncurses5-dev \
+    libpq-dev \
+    libreadline-dev \
     liblttng-ust0 \
     libmaxminddb-dev \
     libncursesw5-dev \
     libpcap-dev \
     libpng-dev \
     libssl-dev \
-    libstdc++6 \
     libsqlite3-dev \
+    libstdc++6 \
     libreadline-dev \
-    libtk8.5 \
+    libssl-dev \
     libtool \
-    libtool-bin \
     lsb-release \
+    libwebp-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libyaml-dev \
     make \
     neovim \
     ninja-build \
