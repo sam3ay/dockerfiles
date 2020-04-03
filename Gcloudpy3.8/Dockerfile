@@ -1,9 +1,22 @@
 FROM google/cloud-sdk:latest
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
-ARG USERNAME=docker
-ARG USER_UID=1001
+
+ARG USERNAME=gcloud
+ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
+ENV ZDOTDIR=${XDG_CONFIG_HOME}/zsh
+ENV ZSH=${ZDOTDIR}/.oh-my-zsh
+
+# Set to false to skip installing zsh and Oh My ZSH!
+ARG INSTALL_ZSH="true"
+
+# Location for common setup script
+# ARG SCRIPT_SOURCE=ms-vscode-debian.sh
+# COPY ${SCRIPT_SOURCE} /tmp/ms-vscode-debian.sh
+ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/ms-vscode-debian.sh
+
 ## Taken from 3.8.2-buster
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
@@ -12,42 +25,26 @@ ENV PATH /usr/local/bin:$PATH
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
 
-# extra dependencies (over what buildpack-deps already includes)
-RUN apt-get update && apt-get install -y \
-	autoconf \
-	automake \
-	build-essential \
-	ca-certificates \
-	cmake \
-	gettext \
-	git \
+ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
+ENV PYTHON_VERSION 3.8.2
+
+
+RUN apt-get update && apt-get -y install --no-install-recommends \
+	apt-utils \
+	dialog \
 	libbluetooth-dev \
-	libssl-dev \
-	libtool \
-	libtool-bin \
-	libncurses5-dev \
-	libsqlite3-dev \
-	libreadline-dev \
-	libgdm-dev \
-	libdb4o-cil-dev \
-	libpcap-dev \
-	neovim \
-	ninja-build \
-	openssl \
-	pkg-config \
-	python-neovim \
-	python3-neovim \
-	sudo \
 	tk-dev \
-	unzip \
 	uuid-dev \
 	wget \
+	ca-certificates 2>&1 \
+	# Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
+	&& wget -q -O /tmp/ms-vscode-debian.sh $SCRIPT_SOURCE \
+	&& /bin/bash /tmp/ms-vscode-debian.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
+	&& rm /tmp/ms-vscode-debian.sh \
+	# Clean up
 	&& apt-get autoremove -y \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
-
-ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
-ENV PYTHON_VERSION 3.8.2
 
 RUN set -ex \
 	\
@@ -120,18 +117,7 @@ RUN set -ex; \
 	\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-
-RUN groupadd --gid $USER_GID $USERNAME \
-	&& useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-	&& echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-	&& chmod 0440 /etc/sudoers.d/$USERNAME
-
-USER $USERNAME
-
-ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
-
+USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 
-# custom bashrc
-RUN git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git && \
-	echo ". ${XDG_CONFIG_HOME}/.custom_bashrc" >>~/.bashrc
+ENTRYPOINT ["/bin/zsh"]

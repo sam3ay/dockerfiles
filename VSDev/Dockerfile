@@ -6,9 +6,18 @@ LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
+ENV ZDOTDIR=${XDG_CONFIG_HOME}/zsh
+ENV ZSH=${ZDOTDIR}/.oh-my-zsh
+
+# Set to false to skip installing zsh and Oh My ZSH!
+ARG INSTALL_ZSH="true"
+
+ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/ms-vscode-debian.sh
 # Docker Compose version
 ARG COMPOSE_VERSION=1.24.0
 
+ENV DEBIAN_FRONTEND=noninteractive
 # Configure apt and install packages
 # https://github.com/microsoft/vscode-dev-containers/blob/master/containers/docker-in-docker/.devcontainer/Dockerfile
 RUN apt-get update \
@@ -27,26 +36,18 @@ RUN apt-get update \
 	# Install Docker Compose
 	&& curl -sSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
 	&& chmod +x /usr/local/bin/docker-compose \
-	#
-	# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
-	# && groupadd --gid $USER_GID $USERNAME \
-	# && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
-	# [Optional] Add sudo support for the non-root user
-	&& apt-get install -y sudo \
-	&& echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME\
-	&& chmod 0440 /etc/sudoers.d/$USERNAME \
-	#
+	&& wget -q -O /tmp/ms-vscode-debian.sh $SCRIPT_SOURCE \
+	&& /bin/bash /tmp/ms-vscode-debian.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
+	&& rm /tmp/ms-vscode-debian.sh \
 	# Clean up
 	&& apt-get autoremove -y \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 
-USER $USERNAME
+ENV DEBIAN_FRONTEND=dialog
 
-ENV XDG_CONFIG_HOME=/home/${USERNAME}/dotfiles/.config
+USER $USERNAME
 
 WORKDIR /home/$USERNAME
 
-# custom bashrc
-RUN git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git && \
-	echo ". /home/${USERNAME}/dotfiles/.custom_bashrc" >>~/.bashrc
+ENTRYPOINT ["/bin/zsh"]

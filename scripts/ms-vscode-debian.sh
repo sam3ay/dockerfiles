@@ -30,6 +30,7 @@ apt-get install -y --no-install-recommends \
     ca-certificates \
     cmake \
     curl \
+    fzf \
     gettext \
     git \
     iproute2 \
@@ -100,18 +101,15 @@ else
     useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME
 fi
 
-# dotfiles
-git clone --recurse-submodules https://github.com/sam3ay/dotfiles.git /home/${USERNAME}/dotfiles
-# cp -R /tmp/dotfiles/.config ${XDG_CONFIG_HOME}
-echo ". ${XDG_CONFIG_HOME}/.custom_bashrc" >>~/.bashrc
-
 # Add add sudo support for non-root user
 apt-get install -y sudo
 echo $USERNAME ALL=\(root\) NOPASSWD:ALL >/etc/sudoers.d/$USERNAME
 chmod 0440 /etc/sudoers.d/$USERNAME
+# dotfiles zsh
+git clone --recurse-submodules --single-branch --branch zsh https://github.com/sam3ay/dotfiles.git /home/${USERNAME}/dotfiles
+echo ". ${XDG_CONFIG_HOME}/.custom_bashrc" >>~/.bashrc
+chown -R $USER_UID:$USER_GID ${XDG_CONFIG_HOME}
 
 if [ "$INSTALL_ZSH" = "true" ]; then
     apt-get install -y zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    chown -R $USER_UID:$USER_GID ${XDG_CONFIG_HOME}
 fi

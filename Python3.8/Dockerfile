@@ -1,8 +1,6 @@
 FROM python:3.8-buster
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 # property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
 # will be updated to match your local UID/GID (when using the dockerFile property).
@@ -18,6 +16,8 @@ ENV ZSH=${ZDOTDIR}/.oh-my-zsh
 ARG INSTALL_ZSH="true"
 
 # Location for common setup script
+# ARG SCRIPT_SOURCE=ms-vscode-debian.sh
+# COPY ${SCRIPT_SOURCE} /tmp/ms-vscode-debian.sh
 ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/ms-vscode-debian.sh
 
 # Avoid warnings by switching to noninteractive
