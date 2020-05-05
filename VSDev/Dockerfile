@@ -1,5 +1,4 @@
-# To fully customize the contents of this image, use the following Dockerfile instead:
-# https://github.com/microsoft/vscode-dev-containers/tree/v0.108.0/containers/debian-10-git/.devcontainer/Dockerfile
+# Templatish https://github.com/microsoft/vscode-dev-containers/tree/v0.108.0/containers/debian-10-git/.devcontainer/Dockerfile
 FROM mcr.microsoft.com/vscode/devcontainers/base:debian-10
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
@@ -16,7 +15,7 @@ ENV ZSH=${ZDOTDIR}/.oh-my-zsh
 # Set to false to skip installing zsh and Oh My ZSH!
 ARG INSTALL_ZSH="true"
 
-ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/ms-vscode-debian.sh
+ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/zsh-code.sh
 # Docker Compose version
 ARG COMPOSE_VERSION=1.24.0
 
@@ -48,9 +47,9 @@ RUN apt-get update && apt-get -y install \
 ENV DEBIAN_FRONTEND=dialog
 
 # Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
-RUN wget -q -O /tmp/ms-vscode-debian.sh $SCRIPT_SOURCE \
-	&& /bin/bash /tmp/ms-vscode-debian.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
-	&& rm /tmp/ms-vscode-debian.sh \
+RUN wget -q -O /tmp/zsh-code.sh $SCRIPT_SOURCE \
+	&& /bin/bash /tmp/zsh-code.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
+	&& rm /tmp/zsh-code.sh \
 	# Clean up
 	&& apt-get autoremove -y \
 	&& apt-get clean -y \
