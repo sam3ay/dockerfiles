@@ -11,7 +11,7 @@ ENV ZSH=${ZDOTDIR}/.oh-my-zsh
 # Set to false to skip installing zsh and Oh My ZSH!
 ARG INSTALL_ZSH="true"
 
-ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/ms-vscode-debian.sh
+ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/zsh-code.sh
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
