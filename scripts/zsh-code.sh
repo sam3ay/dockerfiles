@@ -146,7 +146,7 @@ chmod 0440 /etc/sudoers.d/$USERNAME
 # dotfiles zsh
 git clone --recurse-submodules --single-branch --branch zsh https://github.com/sam3ay/dotfiles.git /home/${USERNAME}/dotfiles
 echo ". ${XDG_CONFIG_HOME}/.custom_bashrc" >>~/.bashrc
-chown -R $USER_UID:$USER_GID ${XDG_CONFIG_HOME}
+chown -R $USER_UID:$USER_GID home/$USERNAME
 
 if [ "$INSTALL_ZSH" = "true" ]; then
     apt-get install -y zsh
