@@ -112,9 +112,29 @@ RUN curl -o /license.txt https://aws-dlc-licenses.s3.amazonaws.com/pytorch-1.5.0
 RUN pip install psutil==5.6.7 \
     Pillow==7.1.0
 
+###### Jupyter Below #####
+
+RUN conda install -c conda-forge \
+    nodejs=12 \
+    jupyterlab \
+    jupyterlab_code_formatter \
+    jupyterlab-git \
+    python-language-server
+
+RUN jupyter labextension install -y --clean \
+    @krassowski/jupyterlab-lsp \
+    @axlair/jupyterlab_vim \
+    @ryantam626/jupyterlab_code_formatter \
+    && jupyter serverextension enable --py jupyterlab_code_formatter --sys-prefix 
+
+
+COPY requirements.txt /tmp/
+
+RUN pip install -Ur /tmp/requirements.txt
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
 
 # Starts framework
-ENTRYPOINT ["bash", "-m", "start_with_right_hostname.sh"]
+ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"]
 CMD ["/bin/bash"]
