@@ -136,5 +136,5 @@ RUN pip install -Ur /tmp/requirements.txt
 ENV DEBIAN_FRONTEND=dialog
 
 # Starts framework
-ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"]
+ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root", "--no-browser", "--port=9000"]
 CMD ["/bin/bash"]
