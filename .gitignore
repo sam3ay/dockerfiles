@@ -1,0 +1,2 @@
+ignore all environmental variable files(may contain secrets)
+*.env
