@@ -12,7 +12,7 @@ ENV ZSH=${ZDOTDIR}/.oh-my-zsh
 # Set to false to skip installing zsh and Oh My ZSH!
 ARG INSTALL_ZSH="true"
 
-ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/zsh-code.sh
+ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/zsh-user.sh
 
 ## Taken from 3.8.2-buster
 # ensure local python is preferred over distribution python
@@ -27,66 +27,67 @@ ENV PYTHON_VERSION 3.8.2
 
 
 RUN apt-get update && apt-get -y install --no-install-recommends \
-	apt-utils \
-	dialog \
-	libbluetooth-dev \
-	tk-dev \
-	uuid-dev \
-	wget \
-	ca-certificates 2>&1 \
-	# Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
-	&& wget -q -O /tmp/zsh-code.sh $SCRIPT_SOURCE \
-	&& /bin/bash /tmp/zsh-code.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
-	&& rm /tmp/zsh-code.sh \
-	# Clean up
-	&& apt-get autoremove -y \
-	&& apt-get clean -y \
-	&& rm -rf /var/lib/apt/lists/*
+    apt-utils \
+    dialog \
+    git \
+    libbluetooth-dev \
+    tk-dev \
+    uuid-dev \
+    wget \
+    ca-certificates 2>&1 \
+    # Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
+    && wget -q -O /tmp/zsh-user.sh $SCRIPT_SOURCE \
+    && /bin/bash /tmp/zsh-user.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
+    && rm /tmp/zsh-user.sh \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex \
-	\
-	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
-	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
-	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
-	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
-	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
-	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
-	&& mkdir -p /usr/src/python \
-	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
-	&& rm python.tar.xz \
-	\
-	&& cd /usr/src/python \
-	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-	&& ./configure \
-	--build="$gnuArch" \
-	--enable-loadable-sqlite-extensions \
-	--enable-optimizations \
-	--enable-option-checking=fatal \
-	--enable-shared \
-	--with-system-expat \
-	--with-system-ffi \
-	--without-ensurepip \
-	&& make -j "$(nproc)" \
-	&& make install \
-	&& ldconfig \
-	\
-	&& find /usr/local -depth \
-	\( \
-	\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-	-o \
-	\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-	\) -exec rm -rf '{}' + \
-	&& rm -rf /usr/src/python \
-	\
-	&& python3 --version
+    \
+    && wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
+    && wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
+    && export GNUPGHOME="$(mktemp -d)" \
+    && gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+    && gpg --batch --verify python.tar.xz.asc python.tar.xz \
+    && { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
+    && rm -rf "$GNUPGHOME" python.tar.xz.asc \
+    && mkdir -p /usr/src/python \
+    && tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
+    && rm python.tar.xz \
+    \
+    && cd /usr/src/python \
+    && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
+    && ./configure \
+    --build="$gnuArch" \
+    --enable-loadable-sqlite-extensions \
+    --enable-optimizations \
+    --enable-option-checking=fatal \
+    --enable-shared \
+    --with-system-expat \
+    --with-system-ffi \
+    --without-ensurepip \
+    && make -j "$(nproc)" \
+    && make install \
+    && ldconfig \
+    \
+    && find /usr/local -depth \
+    \( \
+    \( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+    -o \
+    \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+    \) -exec rm -rf '{}' + \
+    && rm -rf /usr/src/python \
+    \
+    && python3 --version
 
 # make some useful symlinks that are expected to exist
 RUN cd /usr/local/bin \
-	&& ln -s idle3 idle \
-	&& ln -s pydoc3 pydoc \
-	&& ln -s python3 python \
-	&& ln -s python3-config python-config
+    && ln -s idle3 idle \
+    && ln -s pydoc3 pydoc \
+    && ln -s python3 python \
+    && ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
 ENV PYTHON_PIP_VERSION 20.0.2
@@ -95,24 +96,24 @@ ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/d59197a3c169cef378a22
 ENV PYTHON_GET_PIP_SHA256 421ac1d44c0cf9730a088e337867d974b91bdce4ea2636099275071878cc189e
 
 RUN set -ex; \
-	\
-	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
-	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
-	\
-	python get-pip.py \
-	--disable-pip-version-check \
-	--no-cache-dir \
-	"pip==$PYTHON_PIP_VERSION" \
-	; \
-	pip --version; \
-	\
-	find /usr/local -depth \
-	\( \
-	\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-	-o \
-	\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-	\) -exec rm -rf '{}' +; \
-	rm -f get-pip.py
+    \
+    wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
+    echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
+    \
+    python get-pip.py \
+    --disable-pip-version-check \
+    --no-cache-dir \
+    "pip==$PYTHON_PIP_VERSION" \
+    ; \
+    pip --version; \
+    \
+    find /usr/local -depth \
+    \( \
+    \( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+    -o \
+    \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
+    \) -exec rm -rf '{}' +; \
+    rm -f get-pip.py
 
 USER ${USERNAME}
 WORKDIR /home/${USERNAME}
