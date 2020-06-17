@@ -1,3 +1,4 @@
+## based on python installation https://github.com/docker-library/python/blob/master/3.8/buster/Dockerfile
 FROM google/cloud-sdk:latest
 LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
@@ -90,10 +91,10 @@ RUN cd /usr/local/bin \
     && ln -s python3-config python-config
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-ENV PYTHON_PIP_VERSION 20.0.2
+ENV PYTHON_PIP_VERSION 20.1.1
 # https://github.com/pypa/get-pip
-ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/d59197a3c169cef378a22428a3fa99d33e080a5d/get-pip.py
-ENV PYTHON_GET_PIP_SHA256 421ac1d44c0cf9730a088e337867d974b91bdce4ea2636099275071878cc189e
+ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/eff16c878c7fd6b688b9b4c4267695cf1a0bf01b/get-pip.py
+ENV PYTHON_GET_PIP_SHA256 b3153ec0cf7b7bbf9556932aa37e4981c35dc2a2c501d70d91d2795aa532be79
 
 RUN set -ex; \
     \
@@ -114,6 +115,7 @@ RUN set -ex; \
     \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
     \) -exec rm -rf '{}' +; \
     rm -f get-pip.py
+
 
 USER ${USERNAME}
 WORKDIR /home/${USERNAME}
