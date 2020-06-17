@@ -1,6 +1,6 @@
 FROM ubuntu:latest
+LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
-LABEL maintainer="Amazon AI"
 # source https://github.com/aws/sagemaker-pytorch-container
 ### Altered ubuntu base image to latest from 16.04
 

@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
+LABEL maintainer="Sam AY <sam3ay@gmail.com>"
 
-LABEL maintainer="Amazon AI"
 LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
 LABEL com.amazonaws.sagemaker.capabilities.multi-models=true
 

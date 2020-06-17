@@ -15,7 +15,7 @@ ARG INSTALL_ZSH="true"
 
 ARG SCRIPT_SOURCE=https://raw.githubusercontent.com/sam3ay/dockerfiles/master/scripts/zsh-user.sh
 
-## Taken from 3.8.2-buster
+## Taken from 3.8.3-buster
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 
@@ -24,18 +24,15 @@ ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 
 ENV GPG_KEY E3FF2839C048B25C084DEBE9B26995E310250568
-ENV PYTHON_VERSION 3.8.2
+ENV PYTHON_VERSION 3.8.3
 
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get -y install --no-install-recommends \
-    apt-utils \
-    dialog \
-    git \
+# extra dependencies (over what buildpack-deps already includes)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libbluetooth-dev \
     tk-dev \
     uuid-dev \
-    wget \
-    ca-certificates 2>&1 \
     # Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
     && wget -q -O /tmp/zsh-user.sh $SCRIPT_SOURCE \
     && /bin/bash /tmp/zsh-user.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
