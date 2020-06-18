@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libbluetooth-dev \
     tk-dev \
     uuid-dev \
+    wget \
     # Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
     && wget -q -O /tmp/zsh-user.sh $SCRIPT_SOURCE \
     && /bin/bash /tmp/zsh-user.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
